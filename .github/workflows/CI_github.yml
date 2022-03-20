@@ -18,6 +18,10 @@ jobs:
     steps:
     - name: Check out the repository
       uses: actions/checkout@v2
+# Install dependencies
+    - name: Install dependencies
+      run: |
+        apt update && apt install cmake
 # Run up cmake, then make the target binary
     - name: Build
       run: |
