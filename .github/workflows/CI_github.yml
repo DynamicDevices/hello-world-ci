@@ -14,7 +14,7 @@ jobs:
     runs-on: [self-hosted, linux, ARM64]
 # Build within a docker container. This requires the self-hosted runner host environment to support Docker
     container:
-      image: dynamicdevices/yocto-ci-build:latest
+      image: balenalib/raspberrypi4-64-debian:sid-build
     steps:
     - name: Check out the repository
       uses: actions/checkout@v2
