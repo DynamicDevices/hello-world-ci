@@ -1,0 +1,36 @@
+name: main
+
+# Build on push to the main branch or pull request (for automated PR testing)
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+# Make sure the job runs on an ARM64 self-hosted runner (e.g. Raspberry Pi)
+  build-test-store:
+#    runs-on: [self-hosted, linux, X64]
+    runs-on: [self-hosted, linux, ARM64]
+# Build within a docker container. This requires the self-hosted runner host environment to support Docker
+    container:
+      image: dynamicdevices/yocto-ci-build:latest
+    steps:
+    - name: Check out the repository
+      uses: actions/checkout@v2
+# Run up cmake, then make the target binary
+    - name: Build
+      run: |
+        mkdir build && cd build
+        cmake ..
+        make
+# For now just run up the target binary for the logs
+    - name: Testing
+      run: |
+        cd build && ./hello_world
+# Store the artifact for access from the GitHub repo
+    - name: Store artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: hello-world-${{ github.sha }}
+        path: ./build/hello_world
